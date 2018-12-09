@@ -1,9 +1,9 @@
 from torch import nn as nn
 
 
-class CartNet(nn.Module):
+class ValueFunction(nn.Module):
     def __init__(self, hidden_dim):
-        super(CartNet, self).__init__()
+        super(ValueFunction, self).__init__()
         self.hidden_dim = hidden_dim
         self.model_list = [
             nn.Linear(4, hidden_dim),

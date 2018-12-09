@@ -19,6 +19,9 @@ class EGreedy(object):
     def update_n_actions(self):
         self.n_actions = self.n_actions + 1
 
+    def reset_n_actions(self):
+        self.n_actions = 0
+
     def select_action(self, value_function):
         eps_threshold = self.calc_eps_threshold()
         self.update_n_actions()
