@@ -4,16 +4,12 @@ import random
 
 
 class EGreedy(object):
-    def __init__(self, config):
-        self.gamma = config["GAMMA"]
-        self.eps_start = config["EPS_START"]
-        self.eps_end = config["EPS_END"]
-        self.eps_decay = config["EPS_DECAY"]
+    def __init__(self):
         self.n_actions = 0
 
-    def calc_eps_threshold(self):
-        return self.eps_end + (self.eps_start - self.eps_end) * (
-            math.exp(-1. * self.n_actions / self.eps_decay)
+    def calc_eps_threshold(self, config):
+        return config.eps_end + (config.eps_start - config.eps_end) * (
+            math.exp(-1. * self.n_actions / config.eps_decay)
         )
 
     def update_n_actions(self):
@@ -22,8 +18,8 @@ class EGreedy(object):
     def reset_n_actions(self):
         self.n_actions = 0
 
-    def select_action(self, value_function):
-        eps_threshold = self.calc_eps_threshold()
+    def select_action(self, value_function, config):
+        eps_threshold = self.calc_eps_threshold(config)
         self.update_n_actions()
         random_number = random.random()
 

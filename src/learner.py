@@ -1,16 +1,14 @@
 import torch
+import torch.nn.functional as F
 
 
-class Optimize_Molel(object):
+class Learner():
     def __init__(self, old_qnet, new_qnet, optimizer):
         self.new_qnet = new_qnet
         self.old_qnet = old_qnet
         self.old_qnet.load_state_dict(self.old_qnet.state_dict())
         self.old_qnet = self.old_qnet.eval()
         self.optimizer = optimizer
-        self.torch_device = self.config['DEVICE']
-        self.gamma =self.config['GAMMA']
-        self.batch_size = self.config['BATCH_SIZE']
 
     def calc_q(self, state_tensor):
         with torch.no_grad():
@@ -20,7 +18,6 @@ class Optimize_Molel(object):
         torch_device = config.device
         gamma = config.gamma
         batch_size = config.batch_size
-
 
         if len(memory) < batch_size:
             pass
@@ -35,10 +32,11 @@ class Optimize_Molel(object):
 
             with torch.no_grad():
                 unfinished_next_state_tensor = next_state_tensor[finish_index, :]
-                next_q = self.old_net(unfinished_next_state_tensor)
+                next_q = self.old_qnet(unfinished_next_state_tensor)
                 next_qa = next_q.max(1)[0]
                 exp_qa = reward_tensor + (gamma * next_qa)
 
-            # LOSS FUNCTION
-
-        raise NotImplementedError()
+            loss = F.smooth_l1_loss(cur_qa, exp_qa)
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()
