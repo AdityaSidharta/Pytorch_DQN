@@ -3,13 +3,21 @@ import math
 import random
 
 
-class EGreedy(object):
+class Policy:
+    def select_action(self, value_function, config):
+        raise NotImplementedError()
+
+    def best_action(self, value_function, config):
+        raise NotImplementedError()
+
+
+class EGreedy(Policy):
     def __init__(self):
         self.n_actions = 0
 
     def calc_eps_threshold(self, config):
         return config.eps_end + (config.eps_start - config.eps_end) * (
-            math.exp(-1. * self.n_actions / config.eps_decay)
+            math.exp(-1.0 * self.n_actions / config.eps_decay)
         )
 
     def update_n_actions(self):
@@ -27,3 +35,6 @@ class EGreedy(object):
             return np.argmax(value_function)
         else:
             return random.randrange(len(value_function))
+
+    def best_action(self, value_function, config):
+        return np.argmax(value_function)

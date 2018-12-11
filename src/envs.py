@@ -1,6 +1,7 @@
 import gym
 from gym import spaces
 
+
 class Envs(object):
     def __init__(self, name):
         self.name = name

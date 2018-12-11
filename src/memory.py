@@ -22,7 +22,10 @@ class Memory(object):
         if self.position == self.capacity:
             self.position = 0
 
-    def save(self, state: list, action: int, reward: float, next_state: list, finish: int):
+    def save(
+        self, state: np.array, action: int, reward: float, next_state: np.array, finish: int
+    ):
+        state, next_state = state.tolist(), next_state.tolist()
         assert len(state) == self.n_state
         next_state = [np.nan] * self.n_state if finish else next_state
         if self.is_memory_full():
@@ -45,10 +48,12 @@ class Memory(object):
             finish = np.stack([x[4] for x in sample_list]).astype(int)
         if return_tensor:
             state_tensor = torch.from_numpy(state).to(torch_device, dtype=torch.float)
-            action_tensor = torch.from_numpy(action).to(torch_device, dtype=torch.int)
+            action_tensor = torch.from_numpy(action).to(torch_device, dtype=torch.long)
             reward_tensor = torch.from_numpy(reward).to(torch_device, dtype=torch.float)
-            next_state_tensor = torch.from_numpy(next_state).to(torch_device, dtype=torch.float)
-            finish_tensor = torch.from_numpy(finish).to(torch_device, dtype=torch.int)
+            next_state_tensor = torch.from_numpy(next_state).to(
+                torch_device, dtype=torch.float
+            )
+            finish_tensor = torch.from_numpy(finish).to(torch_device, dtype=torch.long)
             return (
                 state_tensor,
                 action_tensor,
