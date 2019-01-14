@@ -1,5 +1,4 @@
 import gym
-from gym import spaces
 
 
 class Envs(object):

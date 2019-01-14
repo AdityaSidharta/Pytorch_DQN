@@ -1,6 +1,8 @@
+import numpy as np
 import torch
 import torch.nn.functional as F
 from utils.logger import log
+
 
 class Learner:
     def __init__(self, arch, optimizer):
@@ -12,9 +14,14 @@ class Learner:
 
     def predict(self, state, config):
         with torch.no_grad():
-            state_tensor = torch.from_numpy(state).to(config.device, dtype = torch.float)
+            state_tensor = torch.from_numpy(state).to(config.device, dtype=torch.float)
             state_tensor = state_tensor.view(1, -1)
-            return self.new_qnet(state_tensor).cpu().numpy().squeeze()
+            value = self.new_qnet(state_tensor).cpu().numpy().squeeze()
+            if config.action_type == 'DISCRETE':
+                action = np.argmax(value)
+            else:
+                raise NotImplementedError()
+            return action
 
     def learn(self, memory, config, cacher):
         torch_device = config.device

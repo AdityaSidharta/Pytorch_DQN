@@ -21,6 +21,13 @@ class Config:
         n_target_update,
         n_episode,
         device,
+        memory_space,
+        observation_space,
+        action_type,
+        action_space,
+        action_low=-1.,
+        action_high=1.,
+
     ):
         self.batch_size = batch_size
         self.gamma = gamma
@@ -30,3 +37,9 @@ class Config:
         self.n_target_update = n_target_update
         self.n_episode = n_episode
         self.device = device
+        self.memory_space = memory_space
+        self.observation_space = observation_space
+        self.action_type = action_type
+        self.action_space = action_space
+        self.action_low = action_low
+        self.action_high = action_high

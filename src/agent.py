@@ -1,6 +1,7 @@
 from tqdm import tqdm
 from utils.logger import log
 
+
 class Agent(object):
     def __init__(self, learner, memory, policy, envs, config, cacher):
         self.learner = learner
@@ -19,10 +20,10 @@ class Agent(object):
         count = 0
         while not done:
             count = count + 1
-            value_function = self.learner.predict(cur_state, self.config)
-            action = self.policy.select_action(value_function, self.config)
-            nxt_state, reward, done, _ = self.envs.step(action)
-            self.memory.save(cur_state, action, reward, nxt_state, done)
+            max_action = self.learner.predict(cur_state, self.config)
+            chosen_action = self.policy.select_action(max_action, self.config)
+            nxt_state, reward, done, _ = self.envs.step(chosen_action)
+            self.memory.save(cur_state, chosen_action, reward, nxt_state, done)
             cur_state = nxt_state
             self.learner.learn(self.memory, self.config, self.cacher)
         log.debug('Number of train episode : {}'.format(count))
@@ -43,6 +44,6 @@ class Agent(object):
             count = count + 1
             value_function = self.learner.predict(cur_state, self.config)
             action = self.policy.best_action(value_function, self.config)
-            nxt_state, reward, done, info = self.envs.step(action)
+            _, _, done, _ = self.envs.step(action)
             self.envs.render()
         log.debug('Number of play episode : {}'.format(count))

@@ -25,6 +25,7 @@ class Memory(object):
     def save(
         self, state: np.array, action: int, reward: float, next_state: np.array, finish: int
     ):
+        # TODO : allow state to have more than 1 dimension
         state, next_state = state.tolist(), next_state.tolist()
         assert len(state) == self.n_state
         next_state = [np.nan] * self.n_state if finish else next_state
