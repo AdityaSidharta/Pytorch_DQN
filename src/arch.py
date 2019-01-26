@@ -42,7 +42,7 @@ class LunarNetCont(nn.Module):
             nn.BatchNorm1d(hidden_dim),
             nn.ReLU(),
             nn.Linear(hidden_dim, 2),
-            nn.Tanh()
+            nn.Tanh(),
         ]
         self.model = nn.Sequential(*self.model_list)
 

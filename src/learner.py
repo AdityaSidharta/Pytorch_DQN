@@ -13,15 +13,12 @@ class Learner:
         self.optimizer = optimizer(self.new_qnet.parameters())
 
     def predict(self, state, config):
+        self.new_qnet.eval()
         with torch.no_grad():
             state_tensor = torch.from_numpy(state).to(config.device, dtype=torch.float)
             state_tensor = state_tensor.view(1, -1)
-            value = self.new_qnet(state_tensor).cpu().numpy().squeeze()
-            if config.action_type == 'DISCRETE':
-                action = np.argmax(value)
-            else:
-                raise NotImplementedError()
-            return action
+            value_func = self.new_qnet(state_tensor).cpu().numpy().squeeze()
+            return value_func
 
     def learn(self, memory, config, cacher):
         torch_device = config.device
@@ -53,7 +50,7 @@ class Learner:
             with torch.no_grad():
                 loss_value = loss.data.cpu().numpy().item()
                 log.debug("Loss value : {}".format(loss_value))
-                cacher.save_cacher('loss', loss_value)
+                cacher.save_cacher("loss", loss_value)
 
     def update(self):
         self.old_qnet.load_state_dict(self.new_qnet.state_dict())

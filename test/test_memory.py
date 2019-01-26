@@ -22,7 +22,7 @@ def test_init():
     assert len(memory) == 0
     assert not memory.is_memory_full()
     assert memory.position == 0
-    assert memory.n_state == 4
+    assert memory.size == 4
     assert memory.capacity == 10
 
 

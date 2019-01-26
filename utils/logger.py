@@ -1,6 +1,7 @@
 import logging
 from utils.envs import logger_file
 
+
 def setup_logger(name: str, log_path: str, level) -> logging.Logger:
     """Logger utility for logging messages
 
@@ -20,7 +21,7 @@ def setup_logger(name: str, log_path: str, level) -> logging.Logger:
 
     logger = logging.getLogger(name)
     logger.setLevel(level)
-    formatter = logging.Formatter('%(asctime)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(message)s")
 
     # create console handler and set level to info
     ch = logging.StreamHandler()
@@ -38,4 +39,5 @@ def setup_logger(name: str, log_path: str, level) -> logging.Logger:
 
     return logger
 
-log = setup_logger('Logger', logger_file, logging.DEBUG)
+
+log = setup_logger("Logger", logger_file, logging.DEBUG)

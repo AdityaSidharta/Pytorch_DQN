@@ -5,9 +5,9 @@ import torch
 
 # State, Action, Reward, Next State
 class Memory(object):
-    def __init__(self, capacity, n_state):
+    def __init__(self, capacity, size):
         self.capacity = capacity
-        self.n_state = n_state
+        self.size = size
         self.memory = []
         self.position = 0
 
@@ -23,12 +23,17 @@ class Memory(object):
             self.position = 0
 
     def save(
-        self, state: np.array, action: int, reward: float, next_state: np.array, finish: int
+        self,
+        state: np.array,
+        action: int,
+        reward: float,
+        next_state: np.array,
+        finish: int,
     ):
-        # TODO : allow state to have more than 1 dimension
-        state, next_state = state.tolist(), next_state.tolist()
-        assert len(state) == self.n_state
-        next_state = [np.nan] * self.n_state if finish else next_state
+        assert state.shape == self.size
+        if finish:
+            next_state = np.zeros(self.size)
+            next_state[:] = np.nan
         if self.is_memory_full():
             self.memory[self.position] = (state, action, reward, next_state, finish)
         else:

@@ -26,7 +26,7 @@ class Cacher:
 
     def new_cacher(self, name, n):
         if name in self.cacher_dict.keys():
-            raise ValueError('CacherObject already exist')
+            raise ValueError("CacherObject already exist")
         cacherobject = CacherObject(name, n)
         self.cacher_dict[name] = cacherobject
 
@@ -36,9 +36,12 @@ class Cacher:
     def reset_cacher(self, name):
         self.cacher_dict[name].reset_memory()
 
-    def plot_cacher(self, name):
+    def plot_cacher(self, name, filename=None):
         assert self.cacher_dict[name].n == 1
         value = self.cacher_dict[name].memory
         flat_value = [item for sublist in value for item in sublist]
         sns.lineplot(range(len(flat_value)), flat_value).set_title(name)
-        plt.show()
+        if filename:
+            plt.savefig(filename)
+        else:
+            plt.show()

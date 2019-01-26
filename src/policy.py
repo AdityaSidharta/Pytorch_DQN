@@ -26,19 +26,15 @@ class EGreedy(Policy):
     def reset_n_actions(self):
         self.n_actions = 0
 
-    def select_action(self, max_action, config):
+    def select_action(self, value_function, config):
         eps_threshold = self.calc_eps_threshold(config)
         self.update_n_actions()
         random_number = random.random()
 
         if random_number > eps_threshold:
-            chosen_action = max_action
+            return np.argmax(value_function)
         else:
-            if config.action_type == 'DISCRETE':
-                chosen_action = random.randrange(config.action_space)
-            else:
-                raise NotImplementedError()
-        return chosen_action
+            return random.randrange(config.action_space)
 
     def best_action(self, value_function, config):
         return np.argmax(value_function)
